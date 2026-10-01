@@ -311,6 +311,7 @@ public:
   bool auto_wrap_mode;
   bool insert_mode;
   bool cursor_visible;
+  int cursor_style; /* DECSCUSR parameter; -1 means never set, leave the real terminal alone */
   bool reverse_video;
   bool bracketed_paste;
 
@@ -385,7 +386,7 @@ public:
   {
     /* only compare fields that affect display */
     return ( width == x.width ) && ( height == x.height ) && ( cursor_col == x.cursor_col )
-           && ( cursor_row == x.cursor_row ) && ( cursor_visible == x.cursor_visible )
+           && ( cursor_row == x.cursor_row ) && ( cursor_visible == x.cursor_visible ) && ( cursor_style == x.cursor_style )
            && ( reverse_video == x.reverse_video ) && ( renditions == x.renditions )
            && ( bracketed_paste == x.bracketed_paste ) && ( mouse_reporting_mode == x.mouse_reporting_mode )
            && ( mouse_focus_event == x.mouse_focus_event ) && ( mouse_alternate_scroll == x.mouse_alternate_scroll )

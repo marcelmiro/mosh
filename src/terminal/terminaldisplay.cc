@@ -52,7 +52,7 @@ std::string Display::open() const
 
 std::string Display::close() const
 {
-  return std::string( "\033[?1l\033[0m\033[?25h"
+  return std::string( "\033[?1l\033[0m\033[?25h\033[0 q"
                       "\033[?1003l\033[?1002l\033[?1001l\033[?1000l"
                       "\033[?1015l\033[?1006l\033[?1005l" )
          + std::string( rmcup ? rmcup : "" );
@@ -110,6 +110,16 @@ std::string Display::new_frame( bool initialized, const Framebuffer& last, const
       frame.append( *i );
     }
     frame.append( '\007' );
+  }
+
+  /* has cursor style changed? */
+  /* A style of -1 means the application never set one. On the first frame we stay
+     silent so the user's own terminal cursor style survives; on a later change to -1
+     (a full reset) we must emit style 0, or the client keeps showing the stale shape. */
+  if ( ( !initialized ) ? ( f.ds.cursor_style >= 0 )
+                        : ( f.ds.cursor_style != frame.last_frame.ds.cursor_style ) ) {
+    snprintf( tmp, 64, "\033[%d q", ( f.ds.cursor_style < 0 ) ? 0 : f.ds.cursor_style );
+    frame.append( tmp );
   }
 
   /* has reverse video state changed? */

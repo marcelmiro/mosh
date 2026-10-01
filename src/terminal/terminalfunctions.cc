@@ -404,6 +404,19 @@ static void CSI_DECSTBM( Framebuffer* fb, Dispatcher* dispatch )
 
 static Function func_CSI_DECSTMB( CSI, "r", CSI_DECSTBM );
 
+/* set cursor style (DECSCUSR) */
+static void CSI_DECSCUSR( Framebuffer* fb, Dispatcher* dispatch )
+{
+  int style = dispatch->getparam( 0, 0 );
+  if ( ( style < 0 ) || ( style > 6 ) ) {
+    return;
+  }
+  fb->ds.cursor_style = style;
+}
+
+static Function func_CSI_DECSCUSR( CSI, " q", CSI_DECSCUSR );
+
+
 /* terminal bell */
 static void Ctrl_BEL( Framebuffer* fb, Dispatcher* dispatch __attribute( ( unused ) ) )
 {
